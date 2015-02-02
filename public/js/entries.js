@@ -3,8 +3,6 @@
     var $q = $('#question');
     var $a = $('#answer');
 
-
-
     var isValid = function (form) {
         var INVALID_CLASS = 'has-error';
         var valid = true;
@@ -25,14 +23,22 @@
         return valid;
     };
 
+    var reset = function () {
+        $a.val('');
+        $q.val('').focus();
+    };
+
     var submit = function (data) {
-        console.log(data);
         $.ajax({
             method: 'POST',
             url: '/entry',
             data: data,
-            complete: function () {
-                console.log(arguments);
+            complete: function (jqXHR, status) {
+                if (status === 'success') {
+                    reset();
+                } else {
+                    alert('unable to save');
+                }
             }
         });
     };
@@ -47,5 +53,5 @@
         return false;
     });
 
-
+    reset();
 }());
