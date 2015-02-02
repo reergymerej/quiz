@@ -1,5 +1,8 @@
 var express = require('express');
 var router = express.Router();
+var mongoose = require('mongoose');
+var models = require('../models/models.js');
+var connection = require('../connection.js');
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -15,28 +18,21 @@ router.get('/entries', function (req, res) {
 });
 
 router.post('/entry', function (req, res) {
-    var q = req.body.q;
-    var a = req.body.a;
 
-    var mongoose = require('mongoose');
-    mongoose.connect('mongodb://localhost/quiz');
+    connection.open(function (done) {
+      var question = new models.Question({
+          q: req.body.q,
+          a: req.body.a
+      });
 
-    var Question = mongoose.model('Question', {
-        q: String,
-        a: String
-    });
-
-    var question = new Question({
-        q: q,
-        a: q
-    });
-
-    question.save(function (err) {
-        if (err) {
-            res.status(500).end();
-        } else {
-            res.jsonp(question);
-        }
+      question.save(function (err, question) {
+          if (err) {
+              res.status(500).end();
+          } else {
+              res.jsonp(question);
+          }
+          done();
+      });
     });
 });
 
