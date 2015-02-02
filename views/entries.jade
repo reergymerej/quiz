@@ -3,3 +3,14 @@ extends layout
 block content
   #container
     h1 Entries
+    form
+        div.form-group
+            label Question
+            input.form-control#question
+        div.form-group
+            label Answer
+            input.form-control#answer
+        button.btn.default(type="submit") Save
+
+    script(src="/bower_components/jquery/dist/jquery.min.js")
+    script(src="/js/entries.js")
