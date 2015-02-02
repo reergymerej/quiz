@@ -36,4 +36,32 @@ router.post('/entry', function (req, res) {
     });
 });
 
+router.get('/test', function (req, res) {
+  res.jsonp({
+    question: {
+      _id: 12345,
+      q: 'blah blah',
+      a: 'bloo bloo'
+    },
+    answers: [
+      {
+        _id: 1,
+        text: 'asdf'
+      },
+      {
+        _id: 2,
+        text: 'qwer'
+      },
+      {
+        _id: 12345,
+        text: 'bloo bloo'
+      },
+      {
+        _id: 4,
+        text: 'kkaskdsfk'
+      }
+    ]
+  });
+});
+
 module.exports = router;

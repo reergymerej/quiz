@@ -3,3 +3,15 @@ extends layout
 block content
   #container
     h1 Quiz
+    div#q 
+    div#answers
+      button.btn.default#1
+      button.btn.default#2
+      button.btn.default#3
+      button.btn.default#4
+    div#controls
+      button.btn.default#submit Submit
+      button.btn.default#next Next
+
+  script(src="/bower_components/jquery/dist/jquery.min.js")
+  script(src="/js/quiz.js")
