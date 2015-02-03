@@ -15,5 +15,6 @@ exports.open = function (callback) {
     });
   });
 
-  mongoose.connect('mongodb://localhost/quiz');
+  // mongoose.connect('mongodb://localhost/quiz');
+  mongoose.connect('mongodb://dude:dude@troup.mongohq.com:10027/reergymerej');
 };
