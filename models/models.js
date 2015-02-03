@@ -60,6 +60,10 @@ questionSchema.statics.getRandomAnswers = function (count, callback) {
 
 var Question = mongoose.model('Question', questionSchema);
 
+var rand = function (min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+};
+
 var getTest = function (done) {
 
     Question.getRandom(function (err, question) {
@@ -67,8 +71,15 @@ var getTest = function (done) {
             done(err);
         } else {
 
-            Question.getRandomAnswers(4, function (err, answers) {
+            Question.getRandomAnswers(3, function (err, answers) {
                 // TODO: Use a proper schema for this.
+                var correctAnswer = {
+                    _id: question._id,
+                    text: question.a
+                };
+
+                answers.splice(rand(0, answers.length - 1), 0, correctAnswer);
+
                 done(null, {
                     question: question,
                     answers: answers
