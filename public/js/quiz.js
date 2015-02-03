@@ -29,7 +29,7 @@
             },
             complete: function (jqXHR, status) {
                 if (status !== 'success') {
-                    alert('unable to load test');
+                    console.error('unable to load test');
                 }
             }
         });
