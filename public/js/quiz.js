@@ -36,19 +36,31 @@
         });
     };
 
+    var sendResponse = function (questionId, answerId) {
+        $.ajax({
+            url: '/response',
+            method: 'POST',
+            data: {
+                questionId: questionId,
+                answerId: answerId
+            }
+        });
+    };
+
     $('#answers > button').on('click', function () {
         var $btn = $(this);
-        var answerData = $btn.data();
-        var questionData = $q.data();
+        var answerId = $btn.data('_id');
+        var questionId = $q.data('question')._id;
 
-        if (questionData.question._id !== answerData._id) {
+        if (questionId !== answerId) {
             $btn.addClass(WRONG_CLASS);
         }
 
         $('button').filter(function (i, btn) {
-            return $(btn).data('_id') === questionData.question._id;
+            return $(btn).data('_id') === questionId;
         }).addClass(RIGHT_CLASS);
 
+        sendResponse(questionId, answerId);
         $next.show();
     });
 

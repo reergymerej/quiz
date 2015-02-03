@@ -50,32 +50,30 @@ router.get('/test', function (req, res) {
       done();
     });
   });
+});
 
-  // res.jsonp({
-  //   question: {
-  //     _id: 12345,
-  //     q: 'blah blah',
-  //     a: 'bloo bloo'
-  //   },
-  //   answers: [
-  //     {
-  //       _id: 1,
-  //       text: 'asdf'
-  //     },
-  //     {
-  //       _id: 2,
-  //       text: 'qwer'
-  //     },
-  //     {
-  //       _id: 12345,
-  //       text: 'bloo bloo'
-  //     },
-  //     {
-  //       _id: 4,
-  //       text: 'kkaskdsfk'
-  //     }
-  //   ]
-  // });
+router.post('/response', function (req, res) {
+
+  connection.open(function (done) {
+    var q = req.body.questionId;
+    var a = req.body.answerId;
+
+    var response = new models.Response({
+      q: q,
+      a: a,
+      correct: q === a
+    });
+
+    response.save(function (err, response) {
+      if (err) {
+        res.status(500).end();
+      } else {
+        res.jsonp(response);
+      }
+
+      done();
+    });
+  });
 });
 
 module.exports = router;

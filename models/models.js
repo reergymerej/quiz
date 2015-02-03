@@ -89,5 +89,12 @@ var getTest = function (done) {
     });
 };
 
+var Response = mongoose.model('Response', {
+    q: String,
+    a: String,
+    correct: Boolean
+});
+
 exports.Question = Question;
 exports.getTest = getTest;
+exports.Response = Response;
