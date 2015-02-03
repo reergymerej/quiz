@@ -1,16 +1,17 @@
 extends layout
 
 block content
-  #container
-    h1 Quiz
-    div#q 
-    div#answers
-      button.btn.btn-default.btn-block#1
-      button.btn.btn-default.btn-block#2
-      button.btn.btn-default.btn-block#3
-      button.btn.btn-default.btn-block#4
-    div#controls
-      button.btn.btn-primary.btn-block#next Next
+  div#container.container
+    div.row
+      p#q.text-center.col-md-12
+    div#answers.row
+      div.answer.col-sm-6#1
+      div.answer.col-sm-6#2
+      div.answer.col-sm-6#3
+      div.answer.col-sm-6#4
+    div#controls.row
+      div.col-sm-6.col-sm-offset-3
+        button.btn.btn-primary.btn-block#next Next
 
   script(src="/bower_components/jquery/dist/jquery.min.js")
   script(src="/js/quiz.js")

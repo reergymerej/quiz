@@ -5,6 +5,7 @@
     var $3 = $('#3');
     var $4 = $('#4');
     var $next = $('#next');
+    var $answerButtons = $('#answers .answer');
 
     var WRONG_CLASS = 'btn-danger';
     var RIGHT_CLASS = 'btn-success';
@@ -21,6 +22,7 @@
         $next.hide();
         $('.' + WRONG_CLASS).removeClass(WRONG_CLASS);
         $('.' + RIGHT_CLASS).removeClass(RIGHT_CLASS);
+        $answerButtons.prop('disabled', false);
 
         $.ajax({
             url: '/test',
@@ -47,21 +49,24 @@
         });
     };
 
-    $('#answers > button').on('click', function () {
+    $answerButtons.on('click', function () {
         var $btn = $(this);
         var answerId = $btn.data('_id');
         var questionId = $q.data('question')._id;
 
-        if (questionId !== answerId) {
-            $btn.addClass(WRONG_CLASS);
+        if (!$next.is(':visible')) {
+            if (questionId !== answerId) {
+                $btn.addClass(WRONG_CLASS);
+            }
+
+            $answerButtons.filter(function (i, btn) {
+                return $(btn).data('_id') === questionId;
+            }).addClass(RIGHT_CLASS);
+
+            sendResponse(questionId, answerId);
+            $next.show();
+            $answerButtons.prop('disabled', true);
         }
-
-        $('button').filter(function (i, btn) {
-            return $(btn).data('_id') === questionId;
-        }).addClass(RIGHT_CLASS);
-
-        sendResponse(questionId, answerId);
-        $next.show();
     });
 
     $next.on('click', function () {
