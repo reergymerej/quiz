@@ -72,18 +72,23 @@ var getTest = function (done) {
         } else {
 
             Question.getRandomAnswers(3, function (err, answers) {
-                // TODO: Use a proper schema for this.
-                var correctAnswer = {
-                    _id: question._id,
-                    text: question.a
-                };
+                if (err) {
+                    console.log('unable to get answers');
+                    done(err);
+                } else {
+                    // TODO: Use a proper schema for this.
+                    var correctAnswer = {
+                        _id: question._id,
+                        text: question.a
+                    };
 
-                answers.splice(rand(0, answers.length - 1), 0, correctAnswer);
+                    answers.splice(rand(0, answers.length - 1), 0, correctAnswer);
 
-                done(null, {
-                    question: question,
-                    answers: answers
-                });
+                    done(null, {
+                        question: question,
+                        answers: answers
+                    });
+                }
             });
         }
     });
