@@ -9,8 +9,55 @@
 
     var WRONG_CLASS = 'btn-danger';
     var RIGHT_CLASS = 'btn-success';
+    var nextTest;
 
-    var setup = function (test) {
+    var next = function () {
+        resetTestElements();
+        getTest(function (test) {
+            if (test) {
+                setupTestElements(test);
+            }
+            preloadNextTest();
+        });
+    };
+
+    var resetTestElements = function () {
+        $next.hide();
+        $('.' + WRONG_CLASS).removeClass(WRONG_CLASS);
+        $('.' + RIGHT_CLASS).removeClass(RIGHT_CLASS);
+        $answerButtons.prop('disabled', false);
+    };
+
+    var getTest = function (callback) {
+        if (nextTest) {
+            callback(nextTest);
+            nextTest = null;
+        } else {
+            getTestFromServer(function (test) {
+                callback(test);
+            });
+        }
+    };
+
+    var getTestFromServer = function (callback) {
+        var test;
+
+        $.ajax({
+            url: '/test',
+            method: 'GET',
+            success: function (resp) {
+                test = resp;
+            },
+            complete: function (jqXHR, status) {
+                if (status !== 'success') {
+                    console.error('unable to load test');
+                }
+                callback(test);
+            }
+        });
+    };
+
+    var setupTestElements = function (test) {
         $q.html(test.question.q).data(test);
         $1.html(test.answers[0].text).data(test.answers[0]);
         $2.html(test.answers[1].text).data(test.answers[1]);
@@ -18,23 +65,9 @@
         $4.html(test.answers[3].text).data(test.answers[3]);
     };
 
-    var loadTest = function () {
-        $next.hide();
-        $('.' + WRONG_CLASS).removeClass(WRONG_CLASS);
-        $('.' + RIGHT_CLASS).removeClass(RIGHT_CLASS);
-        $answerButtons.prop('disabled', false);
-
-        $.ajax({
-            url: '/test',
-            method: 'GET',
-            success: function (resp) {
-                setup(resp);
-            },
-            complete: function (jqXHR, status) {
-                if (status !== 'success') {
-                    console.error('unable to load test');
-                }
-            }
+    var preloadNextTest = function () {
+        getTestFromServer(function (test) {
+            nextTest = test;
         });
     };
 
@@ -69,10 +102,7 @@
         }
     });
 
-    $next.on('click', function () {
-        loadTest();
-    });
-
-    loadTest();
+    $next.on('click', next);
+    next();
 
 }());

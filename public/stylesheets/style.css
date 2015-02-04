@@ -1,3 +1,6 @@
-.invalid {
-    color: red;
+.answer {
+    cursor: pointer;
 }
+.answer:hover {
+    background-color: #EEE;
+};
