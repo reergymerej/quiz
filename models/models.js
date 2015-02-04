@@ -4,16 +4,9 @@
 var mongoose = require('mongoose');
 var questionSchema = new mongoose.Schema({
     q: String,
-    a: String
-});
-
-var answerSchema = new mongoose.Schema({
-    text: String
-});
-
-var testSchema = new mongoose.Schema({
-    // question: questionSchema,
-    answers: [answerSchema]
+    a: String,
+    correct: Number,
+    incorrect: Number
 });
 
 questionSchema.statics.getRandom = function (callback) {
@@ -27,6 +20,41 @@ questionSchema.statics.getRandom = function (callback) {
             });
         }
     }.bind(this));
+};
+
+questionSchema.statics.getNextQuestion = function (callback) {
+    var that = this;
+
+    // Find the lowest "correct" value.
+    this.aggregate(
+        { $group: { _id: null, min: { $min: '$correct' } } },
+        { $project: { _id: 0, min: 1} },
+
+        function (err, res) {
+            var correctValue;
+
+            if (err) {
+                console.log('unable to aggregate');
+            } else {
+                correctValue = res[0].min;
+                console.log('pick from questions with only ' + correctValue + ' correct responses');
+            }
+
+            that.find({ correct: correctValue }, function (err, questions) {
+                var question;
+
+                if (err) {
+                    console.log('unable to getNextQuestion');
+                } else {
+                    question = questions[rand(0, questions.length - 1)];
+                    console.log(questions.length);
+                }
+                
+                callback(err, question);
+            });
+        }
+    );
+
 };
 
 questionSchema.statics.getRandomAnswers = function (count, callback) {
@@ -66,7 +94,7 @@ var rand = function (min, max) {
 
 var getTest = function (done) {
 
-    Question.getRandom(function (err, question) {
+    Question.getNextQuestion(function (err, question) {
         if (err) {
             done(err);
         } else {

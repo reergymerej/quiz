@@ -23,7 +23,9 @@ router.post('/entry', function (req, res) {
 
     var question = new models.Question({
         q: req.body.q,
-        a: req.body.a
+        a: req.body.a,
+        correct: 0,
+        incorrect: 0
     });
 
     question.save(function (err, question) {
@@ -57,12 +59,35 @@ router.post('/response', function (req, res) {
     correct: q === a
   });
 
-  response.save(function (err, response) {
+  // find the question
+  models.Question.findById(q, function (err, question) {
+    var correct;
+    var incorrect;
+
     if (err) {
-      res.status(500).end();
+      console.log('unable to find question based on response');
     } else {
-      res.jsonp(response);
+      // update the correct/incorrect count
+      correct = question.correct || 0;
+      incorrect = question.incorrect || 0;
+
+      if (response.correct) {
+        question.set('correct', correct + 1);
+      } else {
+        question.set('incorrect', correct + 1);
+      }
+
+      question.save(function (err, response) {
+        response.save(function (err, response) {
+          if (err) {
+            res.status(500).end();
+          } else {
+            res.jsonp(response);
+          }
+        });
+      });
     }
+
   });
 });
 
