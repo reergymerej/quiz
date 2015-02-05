@@ -66,16 +66,23 @@ router.post('/response', function (req, res) {
 
     if (err) {
       console.log('unable to find question based on response');
+      
     } else {
       // update the correct/incorrect count
       correct = question.correct || 0;
       incorrect = question.incorrect || 0;
 
       if (response.correct) {
-        question.set('correct', correct + 1);
+        correct++;
       } else {
-        question.set('incorrect', correct + 1);
+        incorrect++;
       }
+
+      question.set({
+        correct: correct,
+        incorrect: incorrect,
+        score: correct - incorrect
+      });
 
       question.save(function (err, response) {
         response.save(function (err, response) {
