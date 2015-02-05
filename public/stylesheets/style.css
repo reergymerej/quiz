@@ -1,6 +1,18 @@
-.answer {
-    cursor: pointer;
+#container {
+  padding-top: 1em;
 }
+
+.answer {
+  cursor: pointer;
+  border: 1px solid #999;
+  padding: 0.4em 1em;
+  border-radius: 0.4em;
+}
+
 .answer:hover {
-    background-color: #EEE;
-};
+  background-color: #EEE;
+}
+
+#q {
+  font-size: 1.3em;
+}

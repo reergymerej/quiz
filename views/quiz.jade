@@ -3,12 +3,15 @@ extends layout
 block content
   div#container.container
     div.row
-      p#q.text-center.col-md-12
+      div.col-md-12
+        p#q.text-center
     div#answers.row
-      div.answer.col-sm-6#1
-      div.answer.col-sm-6#2
-      div.answer.col-sm-6#3
-      div.answer.col-sm-6#4
+      div.col-sm-6
+        p.answer#1
+        p.answer#2
+      div.col-sm-6
+        p.answer#3
+        p.answer#4
     div#controls.row
       div.col-sm-6.col-sm-offset-3
         button.btn.btn-primary.btn-block#next Next
