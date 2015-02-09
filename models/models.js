@@ -12,7 +12,10 @@ var questionSchema = new mongoose.Schema({
     a: String,
     correct: Number,
     incorrect: Number,
-    score: Number
+    score: {
+        type: Number,
+        default: 0
+    }
 });
 
 questionSchema.statics.getRandom = function (callback) {
